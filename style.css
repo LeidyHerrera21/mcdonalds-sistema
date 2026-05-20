@@ -1,0 +1,672 @@
+/* style.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+body{
+    background: #2B0B0B;
+}
+
+.container{
+    display:flex;
+}
+/* Botón Salir Flotante (Esquina inferior derecha de la pantalla) */
+.btn-salir-flotante {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999;
+}
+
+.btn-salir-flotante a {
+    background-color: #3e2723; /* Un gris/marrón oscuro elegante que combine con tu panel */
+    color: #ffffff !important;
+    padding: 12px 28px;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    border: 2px solid #5d4037;
+    border-radius: 5px;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+/* Efecto hover interactivo */
+.btn-salir-flotante a:hover {
+    background-color: #d32f2f; /* Cambia a rojo McDonald's de alerta al querer salir */
+    border-color: #f44336;
+    transform: translateY(-2px);
+}
+/* SIDEBAR */
+
+.sidebar{
+    width:270px;
+    height:100vh;
+    background:#972525;
+    position:fixed;
+    padding:20px;
+    box-shadow:4px 0 10px rgba(0,0,0,.4);
+}
+
+.logo{
+    text-align:center;
+    color:white;
+    margin-bottom:40px;
+}
+
+.logo h2{
+    color:#e5f838;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin:12px 0;
+}
+
+.menu li a{
+    text-decoration:none;
+    color:#cbd5e1;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:15px;
+    border-radius:12px;
+    transition:.3s;
+}
+
+.menu li a:hover{
+    background:#5c1010;
+    color:#df3434;
+    transform:translateX(5px);
+}
+
+.active a{
+    background:#5c1010;
+    color:#df3434 !important;
+}
+
+.logout{
+    margin-top:50px;
+}
+
+/* MAIN */
+
+.main-content{
+    margin-left:270px;
+    width:100%;
+    padding:30px;
+}
+
+/* NAVBAR */
+
+.navbar{
+    background:#972525;
+    padding:20px;
+    border-radius:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:white;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+.top-info{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    
+}
+
+.user{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#423636;
+    padding:10px 20px;
+    border-radius:30px;
+}
+
+.user i{
+    font-size:28px;
+    color:#941c18;
+}
+
+/* WELCOME */
+
+.welcome-box{
+    background: linear-gradient(135deg, #2A2A2A, #1A1A1A);
+    margin-top:25px;
+    padding:30px;
+    border-radius:20px;
+    color:white;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);
+    border-left: 5px solid #FFC72C;
+}
+
+.welcome-box p{
+    color:#94a3b8;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.logo img{
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.logo h2{
+    color: #FFD700;
+    font-size: 22px;
+    font-weight: bold;
+     margin: 0;
+    transform: translateY(10px);
+}
+/* CARDS */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:20px;
+    margin-top:30px;
+}
+
+.card{
+    background:#FFC72C;
+    color:#1A1A1A;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    transition:.4s;
+    cursor:pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card i{
+    font-size:40px;
+    margin-bottom:15px;
+    color:#0c0a0a;
+}
+
+.card h3{
+    color:#000000;
+    margin-bottom:10px;
+}
+
+.card h2{
+    font-size:32px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.sidebar{
+    width:90px;
+}
+
+.sidebar .logo h2{
+    display:none;
+}
+
+.menu li a{
+    justify-content:center;
+}
+
+.menu li a span{
+    display:none;
+}
+
+.main-content{
+    margin-left:90px;
+}
+
+}
+
+/* ================= CHATBOT ================= */
+.chatbot-btn{
+    position: fixed;
+
+    /* AL LADO DEL BOTÓN SALIR */
+    bottom: 25px;
+    right: 180px;
+
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    background: #da291c;
+    color: white;
+
+    border: none;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
+    z-index: 9999;
+
+    transition: 0.3s;
+}
+
+.chatbot-btn:hover{
+    transform: scale(1.1);
+    background: #b71c1c;
+}
+
+/* ================= CHATBOX ================= */
+
+.chatbot-container{
+    position: fixed;
+
+    /* ARRIBA DEL BOTÓN CHATBOT */
+    bottom: 105px;
+
+    /* AJUSTADO PARA QUE QUEDE AL LADO DEL BOTÓN SALIR */
+    right: 25px;
+
+    width: 340px;
+    height: 500px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
+    display: none;
+    flex-direction: column;
+
+    z-index: 9998;
+}
+
+.chatbot-header{
+    background: #da291c;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.chatbot-header h2{
+    font-size: 20px;
+}
+
+.chatbot-box{
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #fff8e7;
+}
+
+.message{
+    padding: 10px 14px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.bot{
+    background: #ffc72c;
+    color: #333;
+}
+
+.user-message{
+    background: #da291c;
+    color: white;
+    margin-left: auto;
+}
+
+.chatbot-input{
+    display: flex;
+    border-top: 1px solid #ccc;
+}
+
+.chatbot-input input{
+    flex: 1;
+    border: none;
+    padding: 15px;
+    outline: none;
+    font-size: 15px;
+}
+
+.chatbot-input button{
+    width: 70px;
+    border: none;
+    background: #da291c;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.chatbot-input button:hover{
+    background: #b71c1c;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    .chatbot-btn{
+
+        bottom: 20px;
+
+        right: 150px;
+
+        width: 58px;
+        height: 58px;
+
+        font-size: 24px;
+    }
+
+    .chatbot-container{
+
+        width: 95%;
+
+        height: 70vh;
+
+        right: 2.5%;
+
+        bottom: 95px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .chatbot-btn{
+
+        right: 135px;
+
+        width: 55px;
+        height: 55px;
+
+        font-size: 22px;
+    }
+
+    .chatbot-container{
+
+        width: calc(100% - 16px);
+
+        left: 8px;
+        right: 8px;
+
+        height: 68vh;
+    }
+
+}
+
+/* ================= RESPONSIVE GENERAL ================= */
+
+@media(max-width: 1200px){
+
+    .cards{
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+/* ================= TABLETS ================= */
+
+@media(max-width: 900px){
+
+    .sidebar{
+        width:90px;
+        padding:15px 10px;
+    }
+
+    .sidebar .logo h2{
+        display:none;
+    }
+
+    .logo{
+        justify-content:center;
+    }
+
+    .logo img{
+        width:50px;
+        height:50px;
+    }
+
+    .menu li a{
+        justify-content:center;
+        padding:15px 10px;
+    }
+
+    .menu li a i{
+        font-size:20px;
+    }
+
+    .menu li a span{
+        display:none;
+    }
+
+    .main-content{
+        margin-left:90px;
+        padding:20px;
+    }
+
+    .navbar{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
+    .top-info{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .cards{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+/* ================= CELULARES ================= */
+
+@media(max-width: 600px){
+
+    body{
+        overflow-x:hidden;
+    }
+
+    .container{
+        flex-direction:column;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+        padding:15px;
+    }
+
+    .logo{
+        justify-content:center;
+    }
+
+    .logo h2{
+        display:block !important;
+        font-size:20px;
+    }
+
+    .menu{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        margin-top:20px;
+    }
+
+    .menu li{
+        margin:0;
+    }
+
+    .menu li a{
+        justify-content:center;
+        font-size:14px;
+        padding:12px;
+        text-align:center;
+    }
+
+    .menu li a i{
+        font-size:18px;
+    }
+
+    .main-content{
+        margin-left:0;
+        width:100%;
+        padding:15px;
+    }
+
+    /* NAVBAR */
+
+    .navbar{
+        flex-direction:column;
+        text-align:center;
+        gap:15px;
+        padding:20px 15px;
+    }
+
+    .navbar h1{
+        font-size:22px;
+    }
+
+    .top-info{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .user{
+        width:100%;
+        justify-content:center;
+    }
+
+    /* WELCOME */
+
+    .welcome-box{
+        padding:20px;
+        text-align:center;
+    }
+
+    .welcome-box h2{
+        font-size:24px;
+    }
+
+    /* CARDS */
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:25px;
+    }
+
+    .card h2{
+        font-size:28px;
+    }
+
+    /* BOTÓN SALIR */
+
+    .btn-salir-flotante{
+        bottom:20px;
+        right:15px;
+    }
+
+    .btn-salir-flotante a{
+        padding:10px 20px;
+        font-size:12px;
+    }
+
+    /* CHATBOT */
+
+    .chatbot-btn{
+        width:60px;
+        height:60px;
+        bottom:90px;
+        right:15px;
+        font-size:24px;
+    }
+
+    .chatbot-container{
+        width:95%;
+        height:75vh;
+        right:2.5%;
+        bottom:160px;
+        border-radius:20px;
+    }
+
+    .chatbot-header h2{
+        font-size:18px;
+    }
+
+    .chatbot-input input{
+        font-size:14px;
+        padding:12px;
+    }
+
+    .chatbot-input button{
+        width:60px;
+    }
+
+}
+
+
+/* ================= CELULARES PEQUEÑOS ================= */
+
+@media(max-width: 400px){
+
+    .navbar h1{
+        font-size:18px;
+    }
+
+    .welcome-box h2{
+        font-size:20px;
+    }
+
+    .card{
+        padding:20px;
+    }
+
+    .card i{
+        font-size:35px;
+    }
+
+    .card h2{
+        font-size:24px;
+    }
+
+    .chatbot-container{
+        height:70vh;
+    }
+
+}
