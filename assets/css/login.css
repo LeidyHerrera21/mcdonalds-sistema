@@ -17,7 +17,7 @@ body{
     linear-gradient(
     rgba(20,20,20,.80),
     rgba(120,0,0,.75)),
-    url("image/McDonald's.png");
+    url("../image/McDonald\'s.png");
 
     background-size:cover;
     background-position:center;

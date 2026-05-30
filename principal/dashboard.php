@@ -1,15 +1,18 @@
 <?php
+/*
 // 1. GESTIÓN DE SESIÓN Y SEGURIDAD DIRECTA
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Si el usuario no ha iniciado sesión, se le deniega el acceso y se le expulsa al login
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login/index.php");
     exit();
 }
+*/
 ?>
+
+
 
 <!DOCTYPE html>
 
@@ -85,9 +88,9 @@ if (!isset($_SESSION['usuario_id'])) {
 
             <li>
 
-                <a href="index.php?action=clientes">
+    <a href="../mantenimientos/clientes/index.php">
 
-                    <i class="fas fa-users"></i>
+        <i class="fas fa-users"></i>
 
                     Clientes
 
@@ -99,15 +102,15 @@ if (!isset($_SESSION['usuario_id'])) {
 
             <li>
 
-                <a href="index.php?action=empleados">
+    <a href="../mantenimientos/insumos/index.php">
 
-                    <i class="fas fa-user-tie"></i>
+        <i class="fas fa-boxes-stacked"></i>
 
-                    Empleados
+        Insumos
 
-                </a>
+    </a>
 
-            </li>
+</li>
 
 
 
@@ -141,32 +144,100 @@ if (!isset($_SESSION['usuario_id'])) {
 
             <li>
 
-                <a href="index.php?action=inventario">
+    <a href="../mantenimientos/costos_producto/index.php">
 
-                    <i class="fas fa-warehouse"></i>
+        <i class="fa-solid fa-money-bill-wave"></i>
 
-                    Inventario
+        Costos Producto
 
-                </a>
+    </a>
 
-            </li>
+</li>
 
 
 
             <li>
 
-                <a href="index.php?action=reporte_ventas">
+    <a href="../mantenimientos/categoria/index.php">
 
-                    <i class="fas fa-chart-pie"></i>
+        <i class="fa-solid fa-layer-group"></i>
 
-                    Reportes
+        Categoria
 
-                </a>
+    </a>
 
-            </li>
+</li>
 
+ <li>
 
+    <a href="../mantenimientos/precios/index.php">
 
+        <i class="fa-solid fa-tags"></i>
+
+        Precios
+
+    </a>
+
+</li>
+           <li>
+
+    <a href="../mantenimientos/proveedores/index.php">
+
+        <i class="fa-solid fa-dolly"></i>
+
+        Proveedores
+
+    </a>
+
+</li>
+
+            
+
+          <li>
+
+    <a href="../mantenimientos/promociones/index.php">
+
+        <i class="fas fa-chart-pie"></i>
+
+        Promociones
+
+    </a>
+
+</li>
+          <li>
+    <a href="../mantenimientos/sucursales/index.php">
+        <i class="fa-solid fa-store"></i>
+        Sucursales
+    </a>
+</li>
+
+<li>
+    <a href="../mantenimientos/empleados/index.php">
+        <i class="fa-regular fa-address-book"></i>
+        Empleados
+    </a>
+</li>
+
+<li>
+    <a href="../mantenimientos/inventarios/index.php">
+        <i class="fa-solid fa-cart-flatbed"></i>
+        Inventarios
+    </a>
+</li>
+
+<li>
+    <a href="../mantenimientos/pagos/index.php">
+    <i class="fa-solid fa-hand-holding-dollar"></i>
+        Pagos
+    </a>
+</li>
+
+<li>
+    <a href="../mantenimientos/detalle/index.php">
+    <i class="fa-regular fa-folder"></i>
+        Detalle de Pedidos
+    </a>
+</li>
             <li>
 
                 <a href="index.php?action=configuracion">
@@ -179,7 +250,17 @@ if (!isset($_SESSION['usuario_id'])) {
 
             </li>
 
-           
+           <li>
+
+                <a href="index.php?action=configuracion">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Cerrar Sesion
+
+                </a>
+
+            </li>
 
             </ul>
 
@@ -229,70 +310,128 @@ if (!isset($_SESSION['usuario_id'])) {
 
 
 
-        <div class="cards">
+<div class="cards">
+    <div class="card" data-reporte="clientes"> 
+        <i class="fas fa-users"></i>
+        <h3>Clientes</h3>
+        <h2 id="num-clientes">...</h2>
+    </div>
 
-            <div class="card">
+    <div class="card" data-reporte="costo_productos">
+        <i class="fa-solid fa-money-bill-wave"></i>
+        <h3>Costo Productos</h3>
+        <h2 id="num-costo_productos">...</h2>
+    </div>
 
-                <i class="fas fa-users"></i>
+    <div class="card" data-reporte="categoria"> 
+        <i class="fa-solid fa-layer-group"></i>
+        <h3>Categoria</h3>
+        <h2 id="num-categoria">...</h2>
+    </div>
 
-                <h3>Clientes</h3>
+    <div class="card" data-reporte="insumos">
+        <i class="fas fa-boxes-stacked"></i>
+        <h3>Insumos</h3>
+        <h2 id="num-insumos">...</h2>
+    </div>
 
-                <h2>520</h2>
+    <div class="card" data-reporte="precios">
+        <i class="fa-solid fa-tags"></i>
+        <h3>Precios</h3>
+        <h2 id="num-precios">...</h2>
+    </div>
 
-            </div>
+    <div class="card" data-reporte="promociones">
+        <i class="fas fa-chart-pie"></i>
+        <h3>Promociones</h3>
+        <h2 id="num-promociones">...</h2>
+    </div>
+
+    <div class="card" data-reporte="proveedores">
+        <i class="fa-solid fa-dolly"></i>
+        <h3>Proveedores</h3>
+        <h2 id="num-proveedores">...</h2>
+    </div>
+
+    <div class="card" data-reporte="sucursales">
+        <i class="fa-solid fa-store"></i>
+        <h3>Sucursales</h3>
+        <h2 id="num-sucursales">...</h2>
+    </div>
+    
+    <div class="card" data-id="productos">
+        <i class="fas fa-box"></i>
+        <h3>Productos</h3>
+        <h2 id="num-productos">...</h2>
+    </div>
+
+    <div class="card" data-id="pedidos">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Pedidos</h3>
+        <h2 id="num-pedidos">...</h2>
+    </div>
+
+    <div class="card" data-id="ventas">
+        <i class="fas fa-dollar-sign"></i>
+        <h3>Ventas</h3>
+        <h2 id="num-ventas">...</h2>
+    </div>
+    <div class="card" data-id="empleados">
+    <i class="fa-regular fa-address-book"></i>
+        <h3>Empleados</h3>
+        <h2 id="num-empleados">...</h2>
+    </div>
+    <div class="card" data-id="inventarios">
+         <i class="fa-solid fa-cart-flatbed"></i>
+        <h3>Inventarios</h3>
+        <h2 id="num-inventarios">...</h2>
+    </div>
+    <div class="card" data-id="pagos">
+        <i class="fa-solid fa-hand-holding-dollar"></i>
+        <h3>Pagos</h3>
+        <h2 id="num-pagos">...</h2>
+    </div>
+    <div class="card" data-id="detalle">
+        <i class="fa-regular fa-folder"></i>
+        <h3> Detalle de Pedidos</h3>
+        <h2 id="num-detalle">...</h2>
+    </div>
+</div>
 
 
+  
+   
 
-            <div class="card">
+<button class="chatbot-btn" onclick="toggleChatbot()">
+    <i class="fas fa-comments"></i>
+</button>
 
-                <i class="fas fa-box"></i>
+<div class="chatbot-container" id="chatbot">
 
-                <h3>Productos</h3>
+    <div class="chatbot-header">
+        <h2>🍔 McDonald's Bot</h2>
+        <p>Asistente Virtual</p>
+    </div>
 
-                <h2>210</h2>
+    <div class="chatbot-box" id="chatbox">
 
-            </div>
+        <div class="message bot">
+            👋 Hola, bienvenido a McDonald's.<br>
+            ¿Cómo puedo ayudarte?
+        </div>
 
+    </div>
 
+    <div class="chatbot-input">
+        <input type="text" id="userInput" placeholder="Escribe un mensaje...">
 
-            <div class="card">
-
-                <i class="fas fa-shopping-cart"></i>
-
-                <h3>Pedidos</h3>
-
-                <h2>87</h2>
-
-            </div>
-
-
-
-            <div class="card">
-
-                <i class="fas fa-dollar-sign"></i>
-
-                <h3>Ventas</h3>
-
-                <h2>S/ 12,500</h2>
-
-            </div>
-
-            </div>
-
-
-
-    </div> </div> <div class="btn-salir-flotante">
-
-    <a href="index.php?action=logout">
-
-        <i class="fas fa-sign-out-alt"></i>
-
-        SALIR
-
-    </a>
+        <button onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
 
 </div>
 
+</div>
 
 <script src="../assets/js/main.js"></script>
 
