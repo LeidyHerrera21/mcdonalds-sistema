@@ -13,195 +13,98 @@ if (!isset($_SESSION['usuario_id'])) {
 
 ?>
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Sistema de Gestion Macdonald</title>
-
-
-
     <link rel="stylesheet" href="../assets/css/style.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
-
 <body>
 
-
-
 <div class="container">
-
-
-
     <div class="sidebar">
-
-
-
         <div class="logo">
-
            <img src="../assets/image/logo.png" alt="Logo McDonald's">
-
             <h2>acDonald's</h2>
-
         </div>
 
-
-
         <ul class="menu">
-
             <li class="active">
-
                 <a href="index.php?action=dashboard">
-
                     <i class="fas fa-chart-line"></i>
-
                     Dashboard
-
                 </a>
-
             </li>
 
-
-
             <li>
-
                 <a href="../mantenimientos/productos/index.php">
-
-
                     <i class="fas fa-box"></i>
-
                     Productos
-
                 </a>
-
             </li>
 
-
-
             <li>
-
     <a href="../mantenimientos/clientes/index.php">
-
         <i class="fas fa-users"></i>
-
                     Clientes
-
                 </a>
-
             </li>
 
-
-
             <li>
-
     <a href="../mantenimientos/insumos/index.php">
-
         <i class="fas fa-boxes-stacked"></i>
-
         Insumos
-
     </a>
-
 </li>
 
-
-
             <li>
-
                 <a href="../mantenimientos/pedidos/index.php">
-
                     <i class="fas fa-shopping-cart"></i>
-
                     Pedidos
-
                 </a>
-
             </li>
 
-
-
             <li>
-
                 <a href="../mantenimientos/turno/index.php">
-
                     <i class="fas fa-user-clock"></i>
-
                     Turno del Empleado
-
                 </a>
-
             </li>
 
-
-
             <li>
-
     <a href="../mantenimientos/costos_producto/index.php">
-
         <i class="fas fa-coins"></i>
-
         Costos Producto
-
     </a>
-
 </li>
 
-
-
             <li>
-
     <a href="../mantenimientos/categoria/index.php">
-
         <i class="fa-solid fa-layer-group"></i>
-
         Categoria
-
     </a>
-
 </li>
 
  <li>
-
     <a href="../mantenimientos/precios/index.php">
-
         <i class="fa-solid fa-tags"></i>
-
         Precios
-
     </a>
-
 </li>
            <li>
-
     <a href="../mantenimientos/proveedores/index.php">
-
         <i class="fa-solid fa-dolly"></i>
-
         Proveedores
-
     </a>
-
 </li>
 
-            
-
           <li>
-
     <a href="../mantenimientos/promociones/index.php">
-
         <i class="fas fa-ticket-simple"></i>
-
         Promociones
-
     </a>
-
 </li>
 
           <li>
@@ -244,65 +147,38 @@ if (!isset($_SESSION['usuario_id'])) {
 </li>
 
             <li>
-
 <a href="../manuales/manuales.php">
     <i class="fas fa-book"></i>
     Manuales
 </a>
-
             </li>
-
            <li>
-
                 <a href="logout.php">
     <i class="fa-solid fa-right-from-bracket"></i>
     Cerrar Sesion
 </a>
 
-
     </div>
-
-
 
     <div class="main-content">
 
-
-
         <div class="navbar">
-
             <h1>Sistema de Gestión McDonald's</h1>
-
             <div class="top-info">
-
                 <div id="clock"></div>
-
                 <div class="user">
-
                     <i class="fas fa-user-circle"></i>
-
                     <span>
-
                         <?php echo isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : 'Admin'; ?>
-
                     </span>
-
                 </div>
-
             </div>
-
         </div>
-
-
 
         <div class="welcome-box">
-
             <h2>Panel de Gestión McDonald's</h2>
-
             <p>Gestiona tu empresa de manera inteligente y profesional.</p>
-
         </div>
-
-
 
 <div class="cards">
     <div class="card" data-reporte="clientes"> 
@@ -395,23 +271,17 @@ if (!isset($_SESSION['usuario_id'])) {
         <h2 id="num-turno">...</h2> </div>
 </div>
 
-
-  
-   
-
 <button class="chatbot-btn" onclick="toggleChatbot()">
     <i class="fas fa-comments"></i>
 </button>
 
 <div class="chatbot-container" id="chatbot">
-
     <div class="chatbot-header">
         <h2>🍔 McDonald's Bot</h2>
         <p>Asistente Virtual</p>
     </div>
 
     <div class="chatbot-box" id="chatbox">
-
         <div class="message bot">
             👋 Hola, bienvenido a McDonald's.<br>
             ¿Cómo puedo ayudarte?
@@ -425,15 +295,10 @@ if (!isset($_SESSION['usuario_id'])) {
         <button onclick="sendMessage()">
             <i class="fas fa-paper-plane"></i>
         </button>
-
 </div>
 
 </div>
-
 <script src="../assets/js/main.js"></script>
-
-
 </body>
-
 </html> 
 
