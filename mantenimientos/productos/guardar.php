@@ -1,38 +1,40 @@
 <?php
 include("../../config/MysqlDB.php");
 
-// Verificamos que se hayan enviado los datos obligatorios por el formulario (POST)
-if (isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['idcategoria']) && isset($_POST['idproveedor'])) {
-    
-    $nombre      = trim($_POST['nombre']);
-    $precio      = trim($_POST['precio']);
-    $idcategoria = trim($_POST['idcategoria']);
-    $idproveedor = trim($_POST['idproveedor']);
+if (isset($_POST['nombre'])) {
+    $nombre = trim($_POST['nombre']);
 
-    // Validamos que los campos no estén vacíos
-    if (!empty($nombre) && !empty($precio) && !empty($idcategoria) && !empty($idproveedor)) {
+    if (!empty($nombre)) {
         try {
-            // Insertamos directamente en la tabla PRODUCTO. IDPRODUCTO se genera automáticamente por el AUTO_INCREMENT
-            $sql = "INSERT INTO PRODUCTO (NOMBRE, PRECIO, IDCATEGORIA, IDPROVEEDOR) 
-                    VALUES (:nombre, :precio, :idcategoria, :idproveedor)";
+
+            // 1. Buscamos el ID más alto actual en la tabla productos
+            $sqlMax = "SELECT MAX(id) AS max_id FROM productos";
+            $stmtMax = $conn_mysql->prepare($sqlMax);
+            $stmtMax->execute();
+            $row = $stmtMax->fetch(PDO::FETCH_ASSOC);
             
+            // 2. Si hay registros le sumamos 1, si está vacía empezamos desde el 1
+            $nuevoId = ($row['max_id'] !== null) ? $row['max_id'] + 1 : 1;
+
+            // 3. Insertamos enviando tanto el ID calculado como el nombre
+            $sql = "INSERT INTO productos (id, nombre) 
+                    VALUES (:id, :nombre)";
+
             $stmt = $conn_mysql->prepare($sql);
-            
-            // Vinculamos cada parámetro con su tipo de dato correspondiente
+
+            $stmt->bindParam(':id', $nuevoId, PDO::PARAM_INT);
             $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR); // DECIMAL se pasa como string para no perder precisión decimal
-            $stmt->bindParam(':idcategoria', $idcategoria, PDO::PARAM_INT);
-            $stmt->bindParam(':idproveedor', $idproveedor, PDO::PARAM_INT);
-            
+
             $stmt->execute();
 
         } catch (PDOException $e) {
-            die("Error crítico al insertar el registro de producto: " . $e->getMessage());
+
+            die("Error crítico al insertar: " . $e->getMessage());
         }
     }
 }
 
-// Redireccionamos limpiamente de vuelta al index de productos
+// Redireccionamos limpiamente de vuelta al index principal
 header("Location: index.php");
 exit();
 ?>

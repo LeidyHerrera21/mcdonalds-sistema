@@ -1,8 +1,21 @@
 <?php
 include("../../config/MysqlDB.php");
 
-$sql = "SELECT * FROM categoria";
-$resultado = mysqli_query($conn, $sql);
+// Verificamos que la variable de conexión PDO exista
+if (!isset($conn_mysql)) {
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
+}
+
+try {
+    // Consulta adaptada a PDO
+    $sql = "SELECT * FROM categoria";
+    $stmt = $conn_mysql->prepare($sql);
+    $stmt->execute();
+    // Obtenemos todas las filas en un array
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error al consultar la base de datos: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -13,11 +26,9 @@ $resultado = mysqli_query($conn, $sql);
 
 <title>Categoria</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-
 *{
     margin:0;
     padding:0;
@@ -31,7 +42,6 @@ body{
 }
 
 /* CONTENEDOR */
-
 .container{
     width:100%;
     background:white;
@@ -40,14 +50,12 @@ body{
 }
 
 /* TITULO */
-
 .titulo{
     color:#b30000;
     margin-bottom:20px;
 }
 
 /* BOTONES */
-
 .top{
     display:flex;
     justify-content:space-between;
@@ -68,7 +76,6 @@ body{
 }
 
 /* FORMULARIO */
-
 form{
     display:flex;
     gap:10px;
@@ -96,7 +103,6 @@ input{
 }
 
 /* TABLA */
-
 table{
     width:100%;
     border-collapse:collapse;
@@ -114,7 +120,6 @@ table td{
 }
 
 /* BOTONES TABLA */
-
 .btn-editar{
     background:orange;
     color:black;
@@ -136,9 +141,7 @@ table td{
     font-size:28px;
     margin-bottom:20px;
 }
-
 </style>
-
 </head>
 <body>
 
@@ -150,79 +153,42 @@ table td{
 <div class="container">
 
 <div class="top">
-
-<h1 class="titulo">
-    Mantenimiento Categoria
-</h1>
-
-<a class="btn-regresar"
-href="../../principal/dashboard.php">
-
-<i class="fa-solid fa-arrow-left"></i>
-Regresar
-
-</a>
-
+    <h1 class="titulo">Mantenimiento Categoria</h1>
+    <a class="btn-regresar" href="../../principal/dashboard.php">
+        <i class="fa-solid fa-arrow-left"></i> Regresar
+    </a>
 </div>
 
 <form action="guardar.php" method="POST">
-
-<input type="text"
-name="nombre"
-placeholder="Ingrese categoria"
-required>
-
-<button class="btn-guardar" type="submit">
-
-<i class="fa-solid fa-floppy-disk"></i>
-Grabar
-
-</button>
-
+    <input type="text" name="nombre" placeholder="Ingrese categoria" required>
+    <button class="btn-guardar" type="submit">
+        <i class="fa-solid fa-floppy-disk"></i> Grabar
+    </button>
 </form>
 
 <table>
-
 <tr>
     <th>ID</th>
     <th>Nombre</th>
     <th>Acciones</th>
 </tr>
 
-<?php while($fila=mysqli_fetch_assoc($resultado)){ ?>
-
-<tr>
-
-<td>
-<?php echo $fila['id']; ?>
-</td>
-
-<td>
-<?php echo $fila['nombre']; ?>
-</td>
-
-<td>
-
-<a class="btn-editar"
-href="editar.php?id=<?php echo $fila['id']; ?>">
-
-Editar
-
-</a>
-
-<a class="btn-eliminar"
-href="eliminar.php?id=<?php echo $fila['id']; ?>">
-
-Eliminar
-
-</a>
-
-</td>
-
-</tr>
-
-<?php } ?>
-
+<?php if (!empty($resultados)): ?>
+    <?php foreach ($resultados as $fila): ?>
+    <tr>
+        <td><?php echo htmlspecialchars($fila['id']); ?></td>
+        <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
+        <td>
+            <a class="btn-editar" href="editar.php?id=<?php echo $fila['id']; ?>">Editar</a>
+            <a class="btn-eliminar" href="eliminar.php?id=<?php echo $fila['id']; ?>" onclick="return confirm('¿Estás seguro de eliminar esta categoría?');">Eliminar</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="3" style="text-align: center; color: #666;">No se encontraron categorías registradas.</td>
+    </tr>
+<?php endif; ?>
 </table>
 
 </div>

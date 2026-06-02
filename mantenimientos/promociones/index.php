@@ -1,13 +1,32 @@
 <?php
 include("../../config/MysqlDB.php");
 
-$sql = "SELECT * FROM promociones";
-$resultado = mysqli_query($conn, $sql);
+// Verificamos que la variable de conexión PDO exista
+if (!isset($conn_mysql)) {
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
+}
+
+try {
+
+    // Consulta adaptada a PDO
+    $sql = "SELECT * FROM promociones";
+
+    $stmt = $conn_mysql->prepare($sql);
+    $stmt->execute();
+
+    // Obtenemos todas las filas
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+
+    die("Error al consultar la base de datos: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -131,6 +150,8 @@ table td{
     border-radius:5px;
 }
 
+/* LOGO */
+
 .logo{
     color:#ffd633;
     font-size:28px;
@@ -138,12 +159,11 @@ table td{
 }
 
 </style>
-
 </head>
 <body>
 
 <div class="logo">
-    <i class="fa-solid fa-burger"></i>
+    <i class="fa-solid fa-tags"></i>
     McDonald's
 </div>
 
@@ -151,33 +171,33 @@ table td{
 
 <div class="top">
 
-<h1 class="titulo">
-    Mantenimiento Promociones
-</h1>
+    <h1 class="titulo">
+        Mantenimiento Promociones
+    </h1>
 
-<a class="btn-regresar"
-href="../../principal/dashboard.php">
+    <a class="btn-regresar"
+       href="../../principal/dashboard.php">
 
-<i class="fa-solid fa-arrow-left"></i>
-Regresar
+        <i class="fa-solid fa-arrow-left"></i>
+        Regresar
 
-</a>
+    </a>
 
 </div>
 
 <form action="guardar.php" method="POST">
 
-<input type="text"
-name="nombre"
-placeholder="Ingrese promoción"
-required>
+    <input type="text"
+           name="nombre"
+           placeholder="Ingrese promoción"
+           required>
 
-<button class="btn-guardar" type="submit">
+    <button class="btn-guardar" type="submit">
 
-<i class="fa-solid fa-floppy-disk"></i>
-Grabar
+        <i class="fa-solid fa-floppy-disk"></i>
+        Grabar
 
-</button>
+    </button>
 
 </form>
 
@@ -189,39 +209,57 @@ Grabar
     <th>Acciones</th>
 </tr>
 
-<?php while($fila=mysqli_fetch_assoc($resultado)){ ?>
+<?php if (!empty($resultados)): ?>
+
+    <?php foreach ($resultados as $fila): ?>
+
+    <tr>
+
+        <td>
+            <?php echo htmlspecialchars($fila['id']); ?>
+        </td>
+
+        <td>
+            <?php echo htmlspecialchars($fila['nombre']); ?>
+        </td>
+
+        <td>
+
+            <a class="btn-editar"
+               href="editar.php?id=<?php echo $fila['id']; ?>">
+
+               Editar
+
+            </a>
+
+            <a class="btn-eliminar"
+               href="eliminar.php?id=<?php echo $fila['id']; ?>"
+               onclick="return confirm('¿Estás seguro de eliminar esta promoción?');">
+
+               Eliminar
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
 
 <tr>
 
-<td>
-<?php echo $fila['id']; ?>
-</td>
+    <td colspan="3"
+        style="text-align:center; color:#666;">
 
-<td>
-<?php echo $fila['nombre']; ?>
-</td>
+        No se encontraron promociones registradas.
 
-<td>
-
-<a class="btn-editar"
-href="editar.php?id=<?php echo $fila['id']; ?>">
-
-Editar
-
-</a>
-
-<a class="btn-eliminar"
-href="eliminar.php?id=<?php echo $fila['id']; ?>">
-
-Eliminar
-
-</a>
-
-</td>
+    </td>
 
 </tr>
 
-<?php } ?>
+<?php endif; ?>
 
 </table>
 

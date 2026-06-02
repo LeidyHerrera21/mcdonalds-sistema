@@ -1,19 +1,19 @@
 <?php
-// Forzar visualizaciÃ³n de errores por si necesitas diagnosticar algo
+// Forzar visualización de errores por si necesitas diagnosticar algo
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 include("../../config/MysqlDB.php");
 
-// Verificamos que la variable de conexiÃ³n PDO exista
+// Verificamos que la variable de conexión PDO exista
 if (!isset($conn_mysql)) {
-    die("Error: La variable \$conn_mysql no estÃ¡ definida en MysqlDB.php");
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
 }
 
 try {
-    // Consulta adaptada a la estructura de tu tabla EMPLEADO_TURNO
-    $sql = "SELECT IDEMPLEADO, IDTURNO FROM EMPLEADO_TURNO";
+    // Consulta adaptada a minúsculas
+    $sql = "SELECT idempleado, idturno FROM empleado_turno";
     $stmt = $conn_mysql->prepare($sql);
     $stmt->execute();
     // Obtenemos todas las filas en un array asociativo
@@ -173,7 +173,7 @@ table td{
 <div class="container">
 
 <div class="top">
-    <h1 class="titulo">Mantenimiento AsignaciÃ³n de Turnos</h1>
+    <h1 class="titulo">Mantenimiento Asignación de Turnos</h1>
     <a class="btn-regresar" href="../../principal/dashboard.php">
         <i class="fa-solid fa-arrow-left"></i> Regresar
     </a>
@@ -197,11 +197,11 @@ table td{
 <?php if (!empty($resultados)): ?>
     <?php foreach ($resultados as $fila): ?>
     <tr>
-        <td><?php echo htmlspecialchars($fila['IDEMPLEADO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDTURNO']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idempleado']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idturno']); ?></td>
         <td>
-            <a class="btn-editar" href="editar_empleado_turno.php?idempleado=<?php echo $fila['IDEMPLEADO']; ?>&idturno=<?php echo $fila['IDTURNO']; ?>">Editar</a>
-            <a class="btn-eliminar" href="eliminar_empleado_turno.php?idempleado=<?php echo $fila['IDEMPLEADO']; ?>&idturno=<?php echo $fila['IDTURNO']; ?>" onclick="return confirm('Â¿EstÃ¡s seguro de remover este turno al empleado?');">Eliminar</a>
+            <a class="btn-editar" href="editar_empleado_turno.php?idempleado=<?php echo $fila['idempleado']; ?>&idturno=<?php echo $fila['idturno']; ?>">Editar</a>
+            <a class="btn-eliminar" href="eliminar_empleado_turno.php?idempleado=<?php echo $fila['idempleado']; ?>&idturno=<?php echo $fila['idturno']; ?>" onclick="return confirm('¿Estás seguro de remover este turno al empleado?');">Eliminar</a>
         </td>
     </tr>
     <?php endforeach; ?>

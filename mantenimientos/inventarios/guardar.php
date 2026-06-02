@@ -8,16 +8,16 @@ if (isset($_POST['idproducto']) && isset($_POST['idsucursal']) && isset($_POST['
     $idsucursal = trim($_POST['idsucursal']);
     $cantidad   = trim($_POST['cantidad']);
 
-    // Validamos que los campos no estÃ©n vacÃ­os y que la cantidad sea un nÃºmero vÃ¡lido (mayor o igual a 0)
+    // Validamos que los campos no estén vacíos y que la cantidad sea un número válido (mayor o igual a 0)
     if (!empty($idproducto) && !empty($idsucursal) && $cantidad !== '' && is_numeric($cantidad) && $cantidad >= 0) {
         try {
-            // Insertamos directamente en la tabla INVENTARIO. IDINVENTARIO se genera solo.
-            $sql = "INSERT INTO INVENTARIO (IDPRODUCTO, IDSUCURSAL, CANTIDAD) 
+            // Sentencia INSERT mapeada completamente a minúsculas
+            $sql = "INSERT INTO inventario (idproducto, idsucursal, cantidad) 
                     VALUES (:idproducto, :idsucursal, :cantidad)";
             
             $stmt = $conn_mysql->prepare($sql);
             
-            // Vinculamos los parÃ¡metros como enteros (PARAM_INT)
+            // Vinculamos los parámetros como enteros (PARAM_INT)
             $stmt->bindParam(':idproducto', $idproducto, PDO::PARAM_INT);
             $stmt->bindParam(':idsucursal', $idsucursal, PDO::PARAM_INT);
             $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
@@ -25,7 +25,7 @@ if (isset($_POST['idproducto']) && isset($_POST['idsucursal']) && isset($_POST['
             $stmt->execute();
 
         } catch (PDOException $e) {
-            die("Error crÃ­tico al insertar el registro de inventario: " . $e->getMessage());
+            die("Error crítico al insertar el registro de inventario: " . $e->getMessage());
         }
     }
 }

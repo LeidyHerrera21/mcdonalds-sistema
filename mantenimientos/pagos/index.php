@@ -1,14 +1,14 @@
 <?php
 include("../../config/MysqlDB.php");
 
-// Verificamos que la variable de conexiÃ³n PDO exista
+// Verificamos que la variable de conexión PDO exista
 if (!isset($conn_mysql)) {
-    die("Error: La variable \$conn_mysql no estÃ¡ definida en MysqlDB.php");
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
 }
 
 try {
-    // Consulta adaptada a la estructura de tu tabla PAGO
-    $sql = "SELECT IDPAGO, MONTO, FECHAPAGO, IDPEDIDO, IDMETODO FROM PAGO";
+    // Consulta adaptada a minúsculas
+    $sql = "SELECT idpago, monto, fechapago, idpedido, idmetodo FROM pago";
     $stmt = $conn_mysql->prepare($sql);
     $stmt->execute();
     // Obtenemos todas las filas en un array asociativo
@@ -178,7 +178,7 @@ table td{
     <input type="number" name="monto" placeholder="Monto (S/. )" step="0.01" min="0.10" required>
     <input type="date" name="fechapago" required>
     <input type="number" name="idpedido" placeholder="ID Pedido" min="1" required>
-    <input type="number" name="idmetodo" placeholder="ID MÃ©todo" min="1" required>
+    <input type="number" name="idmetodo" placeholder="ID Método" min="1" required>
     <button class="btn-guardar" type="submit">
         <i class="fa-solid fa-floppy-disk"></i> Grabar
     </button>
@@ -190,21 +190,21 @@ table td{
     <th>Monto</th>
     <th>Fecha Pago</th>
     <th>ID Pedido</th>
-    <th>ID MÃ©todo</th>
+    <th>ID Método</th>
     <th>Acciones</th>
 </tr>
 
 <?php if (!empty($resultados)): ?>
     <?php foreach ($resultados as $fila): ?>
     <tr>
-        <td><?php echo htmlspecialchars($fila['IDPAGO']); ?></td>
-        <td>S/. <?php echo htmlspecialchars(number_format($fila['MONTO'], 2)); ?></td>
-        <td><?php echo htmlspecialchars($fila['FECHAPAGO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDPEDIDO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDMETODO']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idpago']); ?></td>
+        <td>S/. <?php echo htmlspecialchars(number_format($fila['monto'], 2)); ?></td>
+        <td><?php echo htmlspecialchars($fila['fechapago']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idpedido']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idmetodo']); ?></td>
         <td>
-            <a class="btn-editar" href="editar_pago.php?id=<?php echo $fila['IDPAGO']; ?>">Editar</a>
-            <a class="btn-eliminar" href="eliminar_pago.php?id=<?php echo $fila['IDPAGO']; ?>" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar este registro de pago?');">Eliminar</a>
+            <a class="btn-editar" href="editar_pago.php?id=<?php echo $fila['idpago']; ?>">Editar</a>
+            <a class="btn-eliminar" href="eliminar_pago.php?id=<?php echo $fila['idpago']; ?>" onclick="return confirm('¿Estás seguro de eliminar este registro de pago?');">Eliminar</a>
         </td>
     </tr>
     <?php endforeach; ?>

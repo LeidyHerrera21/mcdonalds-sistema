@@ -5,22 +5,32 @@ include("../../config/MysqlDB.php");
 $id = isset($_GET['id']) ? trim($_GET['id']) : '';
 
 if (!empty($id)) {
+
     try {
-        // Ejecución segura de eliminación con PDO
-        $sql = "DELETE FROM precios WHERE id = :id";
+
+        // Eliminación segura con PDO
+        $sql = "DELETE FROM precios 
+                WHERE id = :id";
+
         $stmt = $conn_mysql->prepare($sql);
+
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
         $stmt->execute();
+
     } catch (PDOException $e) {
-        // Si arroja error por llave foránea (categoría en uso), salta esta alerta
+
+        // Si el precio está relacionado con otra tabla
         echo "<script>
-            alert('No se puede eliminar los proveedores porque esta asociada sucursales.');
+            alert('No se puede eliminar el precio porque está asociado a otros registros.');
             window.location='index.php';
         </script>";
+
         exit();
     }
 }
 
-header("Location: index.php");
+// Redireccionar al mantenimiento
+header('Location: index.php');
 exit();
 ?>

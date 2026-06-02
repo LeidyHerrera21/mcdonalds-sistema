@@ -1,9 +1,4 @@
 <?php
-// Forzar visualización de errores por si necesitas diagnosticar algo
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 include("../../config/MysqlDB.php");
 
 // Verificamos que la variable de conexión PDO exista
@@ -12,13 +7,18 @@ if (!isset($conn_mysql)) {
 }
 
 try {
-    // Consulta adaptada a la estructura de tu tabla PRODUCTO
-    $sql = "SELECT IDPRODUCTO, NOMBRE, PRECIO, IDCATEGORIA, IDPROVEEDOR FROM PRODUCTO";
+
+    // Consulta adaptada a PDO
+    $sql = "SELECT * FROM producto";
+
     $stmt = $conn_mysql->prepare($sql);
     $stmt->execute();
-    // Obtenemos todas las filas en un array asociativo
+
+    // Obtenemos todas las filas en un array
     $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
+
     die("Error al consultar la base de datos: " . $e->getMessage());
 }
 ?>
@@ -29,16 +29,17 @@ try {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mantenimiento de Productos</title>
+<title>Productos</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
 }
 
 body{
@@ -52,7 +53,6 @@ body{
     background:white;
     border-radius:15px;
     padding:30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 /* TITULO */
@@ -81,28 +81,18 @@ body{
     background:#333;
 }
 
-/* FORMULARIO ADAPTADO MULTI-CAMPO */
+/* FORMULARIO */
 form{
     display:flex;
-    flex-wrap: wrap;
     gap:10px;
-    margin-bottom:25px;
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #eee;
+    margin-bottom:20px;
 }
 
 input{
     padding:10px;
     border:1px solid #ccc;
     border-radius:5px;
-    width:160px;
-}
-
-/* Ajuste específico para el campo del nombre del producto para que quepa bien el texto */
-input[name="nombre"] {
-    width: 220px;
+    width:300px;
 }
 
 .btn-guardar{
@@ -112,7 +102,6 @@ input[name="nombre"] {
     padding:10px 20px;
     border-radius:5px;
     cursor:pointer;
-    font-weight: bold;
 }
 
 .btn-guardar:hover{
@@ -129,7 +118,6 @@ table th{
     background:#ffd633;
     padding:12px;
     text-align:left;
-    color: #111;
 }
 
 table td{
@@ -144,8 +132,6 @@ table td{
     padding:6px 10px;
     text-decoration:none;
     border-radius:5px;
-    font-weight: bold;
-    font-size: 14px;
 }
 
 .btn-eliminar{
@@ -154,18 +140,14 @@ table td{
     padding:6px 10px;
     text-decoration:none;
     border-radius:5px;
-    font-weight: bold;
-    font-size: 14px;
 }
 
 .logo{
     color:#ffd633;
     font-size:28px;
     margin-bottom:20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
+
 </style>
 </head>
 <body>
@@ -178,51 +160,92 @@ table td{
 <div class="container">
 
 <div class="top">
-    <h1 class="titulo">Mantenimiento Productos</h1>
+
+    <h1 class="titulo">
+        Mantenimiento Productos
+    </h1>
+
     <a class="btn-regresar" href="../../principal/dashboard.php">
-        <i class="fa-solid fa-arrow-left"></i> Regresar
+        <i class="fa-solid fa-arrow-left"></i>
+        Regresar
     </a>
+
 </div>
 
-<form action="registrar_producto.php" method="POST">
-    <input type="text" name="nombre" placeholder="Nombre del Producto" required>
-    <input type="number" name="precio" placeholder="Precio (S/. )" step="0.01" min="0.00" required>
-    <input type="number" name="idcategoria" placeholder="ID Categoría" min="1" required>
-    <input type="number" name="idproveedor" placeholder="ID Proveedor" min="1" required>
+<form action="guardar.php" method="POST">
+
+    <input
+        type="text"
+        name="nombre"
+        placeholder="Ingrese producto"
+        required
+    >
+
     <button class="btn-guardar" type="submit">
-        <i class="fa-solid fa-floppy-disk"></i> Grabar
+        <i class="fa-solid fa-floppy-disk"></i>
+        Grabar
     </button>
+
 </form>
 
 <table>
+
 <tr>
-    <th>ID Producto</th>
+    <th>ID</th>
     <th>Nombre</th>
-    <th>Precio</th>
-    <th>ID Categoría</th>
-    <th>ID Proveedor</th>
     <th>Acciones</th>
 </tr>
 
 <?php if (!empty($resultados)): ?>
+
     <?php foreach ($resultados as $fila): ?>
+
     <tr>
-        <td><?php echo htmlspecialchars($fila['IDPRODUCTO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['NOMBRE']); ?></td>
-        <td>S/. <?php echo htmlspecialchars(number_format($fila['PRECIO'], 2)); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDCATEGORIA']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDPROVEEDOR']); ?></td>
+
         <td>
-            <a class="btn-editar" href="editar_producto.php?id=<?php echo $fila['IDPRODUCTO']; ?>">Editar</a>
-            <a class="btn-eliminar" href="eliminar_producto.php?id=<?php echo $fila['IDPRODUCTO']; ?>" onclick="return confirm('¿Estás seguro de eliminar este producto?');">Eliminar</a>
+            <?php echo htmlspecialchars($fila['id']); ?>
+        </td>
+
+        <td>
+            <?php echo htmlspecialchars($fila['nombre']); ?>
+        </td>
+
+        <td>
+
+            <a class="btn-editar"
+               href="editar.php?id=<?php echo $fila['id']; ?>">
+
+               Editar
+
+            </a>
+
+            <a class="btn-eliminar"
+               href="eliminar.php?id=<?php echo $fila['id']; ?>"
+               onclick="return confirm('¿Estás seguro de eliminar este producto?');">
+
+               Eliminar
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
+
+    <tr>
+        <td colspan="3"
+            style="text-align:center; color:#666;">
+
+            No se encontraron productos registrados.
+
         </td>
     </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="6" style="text-align: center; color: #666;">No se encontraron productos registrados.</td>
-    </tr>
+
 <?php endif; ?>
+
 </table>
 
 </div>

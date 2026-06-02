@@ -1,20 +1,39 @@
 <?php
 include("../../config/MysqlDB.php");
 
-$sql = "SELECT * FROM precios";
-$resultado = mysqli_query($conn, $sql);
+// Verificamos que la variable de conexión PDO exista
+if (!isset($conn_mysql)) {
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
+}
+
+try {
+
+    // Consulta adaptada a la tabla precios
+    $sql = "SELECT * FROM precios";
+
+    $stmt = $conn_mysql->prepare($sql);
+
+    $stmt->execute();
+
+    // Obtenemos todas las filas
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+
+    die("Error al consultar la base de datos: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Precios</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 
@@ -30,6 +49,7 @@ body{
     padding:30px;
 }
 
+/* CONTENEDOR */
 .container{
     width:100%;
     background:white;
@@ -37,11 +57,13 @@ body{
     padding:30px;
 }
 
+/* TITULO */
 .titulo{
     color:#b30000;
     margin-bottom:20px;
 }
 
+/* BOTONES */
 .top{
     display:flex;
     justify-content:space-between;
@@ -61,18 +83,18 @@ body{
     background:#333;
 }
 
+/* FORMULARIO */
 form{
     display:flex;
     gap:10px;
     margin-bottom:20px;
-    flex-wrap:wrap;
 }
 
 input{
     padding:10px;
     border:1px solid #ccc;
     border-radius:5px;
-    width:250px;
+    width:300px;
 }
 
 .btn-guardar{
@@ -88,6 +110,7 @@ input{
     background:green;
 }
 
+/* TABLA */
 table{
     width:100%;
     border-collapse:collapse;
@@ -104,6 +127,7 @@ table td{
     border-bottom:1px solid #ccc;
 }
 
+/* BOTONES TABLA */
 .btn-editar{
     background:orange;
     color:black;
@@ -127,7 +151,6 @@ table td{
 }
 
 </style>
-
 </head>
 <body>
 
@@ -140,39 +163,34 @@ table td{
 
 <div class="top">
 
-<h1 class="titulo">
-    Mantenimiento Precios
-</h1>
+    <h1 class="titulo">
+        Mantenimiento Precios
+    </h1>
 
-<a class="btn-regresar"
-href="../../principal/dashboard.php">
+    <a class="btn-regresar"
+       href="../../principal/dashboard.php">
 
-<i class="fa-solid fa-arrow-left"></i>
-Regresar
+        <i class="fa-solid fa-arrow-left"></i>
+        Regresar
 
-</a>
+    </a>
 
 </div>
 
 <form action="guardar.php" method="POST">
 
-<input type="text"
-name="producto"
-placeholder="Nombre producto"
-required>
+    <input type="text"
+           name="nombre"
+           placeholder="Ingrese precio"
+           required>
 
-<input type="number"
-step="0.01"
-name="precio"
-placeholder="Precio"
-required>
+    <button class="btn-guardar"
+            type="submit">
 
-<button class="btn-guardar" type="submit">
+        <i class="fa-solid fa-floppy-disk"></i>
+        Grabar
 
-<i class="fa-solid fa-floppy-disk"></i>
-Grabar
-
-</button>
+    </button>
 
 </form>
 
@@ -180,48 +198,61 @@ Grabar
 
 <tr>
     <th>ID</th>
-    <th>Producto</th>
-    <th>Precio</th>
+    <th>Nombre</th>
     <th>Acciones</th>
 </tr>
 
-<?php while($fila=mysqli_fetch_assoc($resultado)){ ?>
+<?php if (!empty($resultados)): ?>
 
-<tr>
+    <?php foreach ($resultados as $fila): ?>
 
-<td>
-<?php echo $fila['id']; ?>
-</td>
+    <tr>
 
-<td>
-<?php echo $fila['nombre']; ?>
-</td>
+        <td>
+            <?php echo htmlspecialchars($fila['id']); ?>
+        </td>
 
-<td>
-S/ <?php echo $fila['precio']; ?>
-</td>
+        <td>
+            <?php echo htmlspecialchars($fila['nombre']); ?>
+        </td>
 
-<td>
+        <td>
 
-<a class="btn-editar"
-href="editar.php?id=<?php echo $fila['id']; ?>">
+            <a class="btn-editar"
+               href="editar.php?id=<?php echo $fila['id']; ?>">
 
-Editar
+                Editar
 
-</a>
+            </a>
 
-<a class="btn-eliminar"
-href="eliminar.php?id=<?php echo $fila['id']; ?>">
+            <a class="btn-eliminar"
+               href="eliminar.php?id=<?php echo $fila['id']; ?>"
+               onclick="return confirm('¿Estás seguro de eliminar este precio?');">
 
-Eliminar
+                Eliminar
 
-</a>
+            </a>
 
-</td>
+        </td>
 
-</tr>
+    </tr>
 
-<?php } ?>
+    <?php endforeach; ?>
+
+<?php else: ?>
+
+    <tr>
+
+        <td colspan="3"
+            style="text-align:center; color:#666;">
+
+            No se encontraron precios registrados.
+
+        </td>
+
+    </tr>
+
+<?php endif; ?>
 
 </table>
 

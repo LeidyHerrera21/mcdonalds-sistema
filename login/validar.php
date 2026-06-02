@@ -1,55 +1,61 @@
 <?php
-// Iniciamos la sesi√≥n de forma directa en este archivo
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
-// 1. Incluir el archivo de conexi√≥n a Oracle 
-// (Ajusta la ruta seg√∫n d√≥nde guardaste el archivo de conexi√≥n de Oracle)
-include '../config/conexion_oracle.php'; 
+// 1. Incluir la conexiÛn PDO
+include '../config/MysqlDB.php'; 
 
 // 2. Capturar los datos enviados por el formulario
-$usuario  = isset($_POST['usuario']) ? $_POST['usuario'] : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+$usuario  = isset($_POST['usuario']) ? trim($_POST['usuario']) : '';
+$password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
 if (empty($usuario) || empty($password)) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 }
 
-// 3. Preparar la consulta SQL para Oracle
-// Nota: En Oracle es una buena pr√°ctica usar may√∫sculas o comprobar exactamente el nombre de tus campos
-$query = "SELECT ID_USUARIO, NOMBRE_USUARIO, ROL FROM USUARIOS WHERE USERNAME = :usr AND PASSWORD = :pass";
+try {
+    // 3. Consulta SQL corregida seg˙n tu base de datos (ID_EMPLEADO y CLAVE)
+    $query = "SELECT ID_EMPLEADO, CLAVE FROM usuarios WHERE ID_EMPLEADO = :usr";
+    
+    if (!isset($conn_mysql)) {
+        throw new Exception("La variable de conexiÛn \$conn_mysql no est· definida. Revisa config/MysqlDB.php");
+    }
 
-// 4. Parsear o preparar la consulta con la conexi√≥n de Oracle ($conn_oracle debe ser tu variable en conexion_oracle.php)
-$stmt = oci_parse($conn_oracle, $query);
+    $stmt = $conn_mysql->prepare($query);
+    // Corregido el error de sintaxis del signo '$' asign·ndole la variable $usuario
+    $stmt->bindParam(':usr', $usuario, PDO::PARAM_STR);
+    $stmt->execute();
+    
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// 5. Vincular los par√°metros para evitar inyecciones SQL
-oci_bind_by_name($stmt, ':usr', $usuario);
-oci_bind_by_name($stmt, ':pass', $password);
+    // 4. Evaluar credenciales usando los campos reales de la tabla
+    if ($row && $password === $row['CLAVE']) {
+        
+        // Guardamos los datos reales en la sesiÛn
+        $_SESSION['usuario_id']     = $row['ID_EMPLEADO'];
+        $_SESSION['usuario_nombre'] = $row['ID_EMPLEADO']; // Usamos ID_EMPLEADO ya que no hay columna 'nombre' o 'usuario'
 
-// 6. Ejecutar la sentencia
-oci_execute($stmt);
+        // Redirigir al Dashboard Principal
+        header("Location: ../principal/dashboard.php");
+        exit();
 
-// 7. Evaluar si se encontr√≥ el registro
-if ($row = oci_fetch_array($stmt, OCI_ASSOC)) {
-    // Si encuentra fila, las credenciales son correctas. Guardamos en la sesi√≥n:
-    $_SESSION['usuario_id']     = $row['ID_USUARIO'];
-    $_SESSION['usuario_nombre'] = $row['NOMBRE_USUARIO'];
-    $_SESSION['rol']            = $row['ROL']; // Ej: "ADMINISTRADOR"
+    } else {
+        // Alerta de error y regreso al index
+        echo "
+        <script>
+            alert('Usuario o contraseÒa incorrectos.');
+            window.location='../index.php';
+        </script>
+        ";
+        exit();
+    }
 
-    // Liberar recursos de Oracle y redirigir al Dashboard Principal
-    oci_free_statement($stmt);
-    header("Location: ../principal/dashboard.php");
-    exit();
-
-} else {
-    // Si no encuentra el usuario o la contrase√±a es incorrecta
-    oci_free_statement($stmt);
-    echo "
-    <script>
-        alert('Usuario o contrase√±a incorrectos en Oracle.');
-        window.location='index.php';
-    </script>
-    ";
+} catch (Exception $e) {
+    echo "Error en el sistema: " . $e->getMessage();
     exit();
 }
 ?>

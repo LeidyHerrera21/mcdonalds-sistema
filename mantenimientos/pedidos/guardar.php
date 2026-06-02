@@ -10,18 +10,18 @@ if (isset($_POST['fecha_pedido']) && isset($_POST['total']) && isset($_POST['idc
     $idempleado   = trim($_POST['idempleado']);
     $idsucursal   = trim($_POST['idsucursal']);
 
-    // Validamos que los campos no estÃ©n vacÃ­os
+    // Validamos que los campos no estén vacíos
     if (!empty($fecha_pedido) && !empty($total) && !empty($idcliente) && !empty($idempleado) && !empty($idsucursal)) {
         try {
-            // Insertamos directamente en la tabla PEDIDO. IDPEDIDO se genera automÃ¡ticamente por el AUTO_INCREMENT
-            $sql = "INSERT INTO PEDIDO (FECHA_PEDIDO, TOTAL, IDCLIENTE, IDEMPLEADO, IDSUCURSAL) 
+            // Sentencia SQL con la tabla y columnas en minúsculas
+            $sql = "INSERT INTO pedido (fecha_pedido, total, idcliente, idempleado, idsucursal) 
                     VALUES (:fecha_pedido, :total, :idcliente, :idempleado, :idsucursal)";
             
             $stmt = $conn_mysql->prepare($sql);
             
-            // Vinculamos cada parÃ¡metro con su tipo de dato correspondiente
-            $stmt->bindParam(':fecha_pedido', $fecha_pedido, PDO::PARAM_STR); // Las fechas se vinculan como string
-            $stmt->bindParam(':total', $total, PDO::PARAM_STR); // DECIMAL se pasa como string para no perder precisiÃ³n decimal
+            // Vinculación de parámetros
+            $stmt->bindParam(':fecha_pedido', $fecha_pedido, PDO::PARAM_STR); 
+            $stmt->bindParam(':total', $total, PDO::PARAM_STR); 
             $stmt->bindParam(':idcliente', $idcliente, PDO::PARAM_INT);
             $stmt->bindParam(':idempleado', $idempleado, PDO::PARAM_INT);
             $stmt->bindParam(':idsucursal', $idsucursal, PDO::PARAM_INT);
@@ -29,12 +29,12 @@ if (isset($_POST['fecha_pedido']) && isset($_POST['total']) && isset($_POST['idc
             $stmt->execute();
 
         } catch (PDOException $e) {
-            die("Error crÃ­tico al insertar el registro de pedido: " . $e->getMessage());
+            die("Error crítico al insertar el registro de pedido: " . $e->getMessage());
         }
     }
 }
 
-// Redireccionamos limpiamente de vuelta al index de pedidos
+// Redireccionamos limpiamente de vuelta al index principal
 header("Location: index.php");
 exit();
 ?>

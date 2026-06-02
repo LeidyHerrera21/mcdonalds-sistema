@@ -8,16 +8,16 @@ if (isset($_POST['idpedido']) && isset($_POST['idproducto']) && isset($_POST['ca
     $idproducto = trim($_POST['idproducto']);
     $cantidad   = trim($_POST['cantidad']);
 
-    // Validamos que los campos no estÃ©n vacÃ­os y sean numÃ©ricos
+    // Validamos que los campos no estén vacíos y sean numéricos
     if (!empty($idpedido) && !empty($idproducto) && !empty($cantidad)) {
         try {
-            // Insertamos directamente. IDDETALLE no se envÃ­a porque es AUTO_INCREMENT
-            $sql = "INSERT INTO DETALLEPEDIDO (IDPEDIDO, IDPRODUCTO, CANTIDAD) 
+            // Consulta de inserción con la tabla y columnas en minúsculas
+            $sql = "INSERT INTO detallepedido (idpedido, idproducto, cantidad) 
                     VALUES (:idpedido, :idproducto, :cantidad)";
             
             $stmt = $conn_mysql->prepare($sql);
             
-            // Vinculamos los parÃ¡metros como enteros (PARAM_INT)
+            // Vinculamos los parámetros como enteros (PARAM_INT)
             $stmt->bindParam(':idpedido', $idpedido, PDO::PARAM_INT);
             $stmt->bindParam(':idproducto', $idproducto, PDO::PARAM_INT);
             $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
@@ -25,7 +25,7 @@ if (isset($_POST['idpedido']) && isset($_POST['idproducto']) && isset($_POST['ca
             $stmt->execute();
 
         } catch (PDOException $e) {
-            die("Error crÃ­tico al insertar el detalle del pedido: " . $e->getMessage());
+            die("Error crítico al insertar el detalle del pedido: " . $e->getMessage());
         }
     }
 }

@@ -1,14 +1,14 @@
 <?php
 include("../../config/MysqlDB.php");
 
-// Verificamos que la variable de conexiÃ³n PDO exista
+// Verificamos que la variable de conexión PDO exista
 if (!isset($conn_mysql)) {
-    die("Error: La variable \$conn_mysql no estÃ¡ definida en MysqlDB.php");
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
 }
 
 try {
-    // Consulta adaptada a la estructura de tu tabla PEDIDO
-    $sql = "SELECT IDPEDIDO, FECHA_PEDIDO, TOTAL, IDCLIENTE, IDEMPLEADO, IDSUCURSAL FROM PEDIDO";
+    // Consulta con entidad y atributos en minúsculas
+    $sql = "SELECT idpedido, fecha_pedido, total, idcliente, idempleado, idsucursal FROM pedido";
     $stmt = $conn_mysql->prepare($sql);
     $stmt->execute();
     // Obtenemos todas las filas en un array asociativo
@@ -76,7 +76,7 @@ body{
     background:#333;
 }
 
-/* FORMULARIO ADAPTADO MULTI-CAMPO */
+/* FORMULARIO ADAPTADO */
 form{
     display:flex;
     flex-wrap: wrap;
@@ -174,7 +174,7 @@ table td{
     </a>
 </div>
 
-<form action="registrar_pedido.php" method="POST">
+<form action="guardar.php" method="POST">
     <input type="date" name="fecha_pedido" required>
     <input type="number" name="total" placeholder="Total (S/. )" step="0.01" min="0.00" required>
     <input type="number" name="idcliente" placeholder="ID Cliente" min="1" required>
@@ -199,15 +199,15 @@ table td{
 <?php if (!empty($resultados)): ?>
     <?php foreach ($resultados as $fila): ?>
     <tr>
-        <td><?php echo htmlspecialchars($fila['IDPEDIDO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['FECHA_PEDIDO']); ?></td>
-        <td>S/. <?php echo htmlspecialchars(number_format($fila['TOTAL'], 2)); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDCLIENTE']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDEMPLEADO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDSUCURSAL']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idpedido']); ?></td>
+        <td><?php echo htmlspecialchars($fila['fecha_pedido']); ?></td>
+        <td>S/. <?php echo htmlspecialchars(number_format($fila['total'], 2)); ?></td>
+        <td><?php echo htmlspecialchars($fila['idcliente']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idempleado']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idsucursal']); ?></td>
         <td>
-            <a class="btn-editar" href="editar_pedido.php?id=<?php echo $fila['IDPEDIDO']; ?>">Editar</a>
-            <a class="btn-eliminar" href="eliminar_pedido.php?id=<?php echo $fila['IDPEDIDO']; ?>" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar este pedido?');">Eliminar</a>
+            <a class="btn-editar" href="editar_pedido.php?id=<?php echo $fila['idpedido']; ?>">Editar</a>
+            <a class="btn-eliminar" href="eliminar_pedido.php?id=<?php echo $fila['idpedido']; ?>" onclick="return confirm('¿Estás seguro de eliminar este pedido?');">Eliminar</a>
         </td>
     </tr>
     <?php endforeach; ?>

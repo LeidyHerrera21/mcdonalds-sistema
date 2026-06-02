@@ -1,6 +1,4 @@
-
 <?php
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -25,19 +23,19 @@ if (isset($_SESSION['usuario_id'])) {
             <div class="logo">
                 <img src="../assets/image/logo.png" alt="McDonald's Logo">
                 <h1>MacDonald's</h1>
-                <p>Sistema de GestiÃ³n</p>
+                <p>Sistema de Gestión</p>
             </div>
 
             <form action="validar.php" method="POST">
 
                 <div class="input-box">
                     <i class="fas fa-user"></i>
-                    <input type="text" name="usuario" placeholder="Usuario" required>
+                    <input type="text" name="usuario" placeholder="ID Empleado" required>
                 </div>
 
                 <div class="input-box">
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="password" placeholder="ContraseÃ±a" required>
+                    <input type="password" name="password" placeholder="Contraseña" required>
                 </div>
 
                 <button type="submit">

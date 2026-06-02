@@ -1,10 +1,26 @@
 <?php
-include("../../config/MysqlDB.php");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-$sql = "SELECT * FROM clientes";
-$resultado = mysqli_query($conn, $sql);
+// 1. CORREGIDO: Subir dos niveles para encontrar la carpeta config
+include '../../config/MysqlDB.php'; 
+
+try {
+    if (!isset($conn_mysql)) {
+        throw new Exception("La variable de conexión \$conn_mysql no está definida.");
+    }
+
+    // 2. Ejecutar la consulta de clientes usando PDO
+    $query = "SELECT id, nombre, apellido, telefono, correo FROM clientes";
+    $stmt = $conn_mysql->prepare($query);
+    $stmt->execute();
+    
+} catch (Exception $e) {
+    echo "Error en el sistema: " . $e->getMessage();
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -187,7 +203,10 @@ Grabar
     <th>Acciones</th>
 </tr>
 
-<?php while($fila=mysqli_fetch_assoc($resultado)){ ?>
+<?php 
+// 3. Modificación del bucle para leer de forma correcta mediante PDO
+while($fila = $stmt->fetch(PDO::FETCH_ASSOC)){ 
+?>
 
 <tr>
 

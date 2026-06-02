@@ -1,15 +1,35 @@
 <?php
 include("../../config/MysqlDB.php");
 
-$sql = "SELECT * FROM sucursales";
-$resultado = mysqli_query($conn, $sql);
+// Verificamos que la variable de conexión PDO exista
+if (!isset($conn_mysql)) {
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
+}
+
+try {
+
+    // Consulta adaptada a PDO
+    $sql = "SELECT * FROM sucursales";
+
+    $stmt = $conn_mysql->prepare($sql);
+    $stmt->execute();
+
+    // Obtenemos todas las filas en un array
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+
+    die("Error al consultar la base de datos: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Sucursales</title>
 
@@ -30,6 +50,8 @@ body{
     padding:30px;
 }
 
+/* CONTENEDOR */
+
 .container{
     width:100%;
     background:white;
@@ -37,10 +59,14 @@ body{
     padding:30px;
 }
 
+/* TITULO */
+
 .titulo{
     color:#b30000;
     margin-bottom:20px;
 }
+
+/* BOTONES */
 
 .top{
     display:flex;
@@ -60,6 +86,8 @@ body{
 .btn-regresar:hover{
     background:#333;
 }
+
+/* FORMULARIO */
 
 form{
     display:flex;
@@ -87,6 +115,8 @@ input{
     background:green;
 }
 
+/* TABLA */
+
 table{
     width:100%;
     border-collapse:collapse;
@@ -102,6 +132,8 @@ table td{
     padding:12px;
     border-bottom:1px solid #ccc;
 }
+
+/* BOTONES TABLA */
 
 .btn-editar{
     background:orange;
@@ -119,6 +151,8 @@ table td{
     border-radius:5px;
 }
 
+/* LOGO */
+
 .logo{
     color:#ffd633;
     font-size:28px;
@@ -126,12 +160,11 @@ table td{
 }
 
 </style>
-
 </head>
 <body>
 
 <div class="logo">
-    <i class="fa-solid fa-burger"></i>
+    <i class="fa-solid fa-building"></i>
     McDonald's
 </div>
 
@@ -139,33 +172,33 @@ table td{
 
 <div class="top">
 
-<h1 class="titulo">
-    Mantenimiento Sucursales
-</h1>
+    <h1 class="titulo">
+        Mantenimiento Sucursales
+    </h1>
 
-<a class="btn-regresar"
-href="../../principal/dashboard.php">
+    <a class="btn-regresar"
+       href="../../principal/dashboard.php">
 
-<i class="fa-solid fa-arrow-left"></i>
-Regresar
+        <i class="fa-solid fa-arrow-left"></i>
+        Regresar
 
-</a>
+    </a>
 
 </div>
 
 <form action="guardar.php" method="POST">
 
-<input type="text"
-name="nombre"
-placeholder="Ingrese sucursal"
-required>
+    <input type="text"
+           name="nombre"
+           placeholder="Ingrese sucursal"
+           required>
 
-<button class="btn-guardar" type="submit">
+    <button class="btn-guardar" type="submit">
 
-<i class="fa-solid fa-floppy-disk"></i>
-Grabar
+        <i class="fa-solid fa-floppy-disk"></i>
+        Grabar
 
-</button>
+    </button>
 
 </form>
 
@@ -177,39 +210,57 @@ Grabar
     <th>Acciones</th>
 </tr>
 
-<?php while($fila=mysqli_fetch_assoc($resultado)){ ?>
+<?php if (!empty($resultados)): ?>
+
+    <?php foreach ($resultados as $fila): ?>
+
+    <tr>
+
+        <td>
+            <?php echo htmlspecialchars($fila['id']); ?>
+        </td>
+
+        <td>
+            <?php echo htmlspecialchars($fila['nombre']); ?>
+        </td>
+
+        <td>
+
+            <a class="btn-editar"
+               href="editar.php?id=<?php echo $fila['id']; ?>">
+
+               Editar
+
+            </a>
+
+            <a class="btn-eliminar"
+               href="eliminar.php?id=<?php echo $fila['id']; ?>"
+               onclick="return confirm('¿Estás seguro de eliminar esta sucursal?');">
+
+               Eliminar
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
 
 <tr>
 
-<td>
-<?php echo $fila['id']; ?>
-</td>
+    <td colspan="3"
+        style="text-align:center; color:#666;">
 
-<td>
-<?php echo $fila['nombre']; ?>
-</td>
+        No se encontraron sucursales registradas.
 
-<td>
-
-<a class="btn-editar"
-href="editar.php?id=<?php echo $fila['id']; ?>">
-
-Editar
-
-</a>
-
-<a class="btn-eliminar"
-href="eliminar.php?id=<?php echo $fila['id']; ?>">
-
-Eliminar
-
-</a>
-
-</td>
+    </td>
 
 </tr>
 
-<?php } ?>
+<?php endif; ?>
 
 </table>
 

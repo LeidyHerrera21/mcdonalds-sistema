@@ -5,22 +5,30 @@ include("../../config/MysqlDB.php");
 $id = isset($_GET['id']) ? trim($_GET['id']) : '';
 
 if (!empty($id)) {
+
     try {
-        // Ejecución segura de eliminación con PDO
+
+        // Eliminación segura con PDO
         $sql = "DELETE FROM insumos WHERE id = :id";
+
         $stmt = $conn_mysql->prepare($sql);
+
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
         $stmt->execute();
+
     } catch (PDOException $e) {
-        // Si arroja error por llave foránea (categoría en uso), salta esta alerta
+
+        // Si ocurre error por llave foránea
         echo "<script>
-            alert('No se puede eliminar los insumos porque esta asociada productos.');
+            alert('No se puede eliminar el insumo porque está asociado a otros registros.');
             window.location='index.php';
         </script>";
+
         exit();
     }
 }
 
-header("Location: index.php");
+header('Location: index.php');
 exit();
 ?>

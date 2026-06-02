@@ -1,14 +1,14 @@
 <?php
 include("../../config/MysqlDB.php");
 
-// Verificamos que la variable de conexiÃ³n PDO exista
+// Verificamos que la variable de conexión PDO exista
 if (!isset($conn_mysql)) {
-    die("Error: La variable \$conn_mysql no estÃ¡ definida en MysqlDB.php");
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
 }
 
 try {
-    // Consulta adaptada a la estructura de tu tabla EMPLEADO
-    $sql = "SELECT IDEMPLEADO, NOMBRE, IDSUCURSAL FROM EMPLEADO";
+    // Consulta adaptada con tabla y columnas en minúsculas
+    $sql = "SELECT idempleado, nombre, idsucursal FROM empleado";
     $stmt = $conn_mysql->prepare($sql);
     $stmt->execute();
     // Obtenemos todas las filas en un array asociativo
@@ -181,7 +181,7 @@ table td{
     </a>
 </div>
 
-<form action="registrar_empleado.php" method="POST">
+<form action="guardar.php" method="POST">
     <input type="text" class="input-nombre" name="nombre" placeholder="Nombre completo del empleado" required>
     <input type="number" class="input-sucursal" name="idsucursal" placeholder="ID Sucursal" min="1" required>
     <button class="btn-guardar" type="submit">
@@ -200,12 +200,12 @@ table td{
 <?php if (!empty($resultados)): ?>
     <?php foreach ($resultados as $fila): ?>
     <tr>
-        <td><?php echo htmlspecialchars($fila['IDEMPLEADO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['NOMBRE']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDSUCURSAL']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idempleado']); ?></td>
+        <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idsucursal']); ?></td>
         <td>
-            <a class="btn-editar" href="editar_empleado.php?id=<?php echo $fila['IDEMPLEADO']; ?>">Editar</a>
-            <a class="btn-eliminar" href="eliminar_empleado.php?id=<?php echo $fila['IDEMPLEADO']; ?>" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar a este empleado?');">Eliminar</a>
+            <a class="btn-editar" href="editar.php?id=<?php echo $fila['idempleado']; ?>">Editar</a>
+            <a class="btn-eliminar" href="eliminar.php?id=<?php echo $fila['idempleado']; ?>" onclick="return confirm('¿Estás seguro de eliminar a este empleado?');">Eliminar</a>
         </td>
     </tr>
     <?php endforeach; ?>

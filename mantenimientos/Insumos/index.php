@@ -1,15 +1,37 @@
 <?php
 include("../../config/MysqlDB.php");
 
-$sql = "SELECT * FROM insumos";
-$resultado = mysqli_query($conn, $sql);
+// Verificamos que la variable de conexión PDO exista
+if (!isset($conn_mysql)) {
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
+}
+
+try {
+
+    // Consulta adaptada a PDO
+    $sql = "SELECT * FROM insumos";
+
+    $stmt = $conn_mysql->prepare($sql);
+
+    $stmt->execute();
+
+    // Obtenemos todas las filas en un array
+    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+
+    die("Error al consultar la base de datos: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Insumos</title>
 
@@ -73,14 +95,13 @@ form{
     display:flex;
     gap:10px;
     margin-bottom:20px;
-    flex-wrap:wrap;
 }
 
 input{
     padding:10px;
     border:1px solid #ccc;
     border-radius:5px;
-    width:220px;
+    width:300px;
 }
 
 .btn-guardar{
@@ -132,6 +153,8 @@ table td{
     border-radius:5px;
 }
 
+/* LOGO */
+
 .logo{
     color:#ffd633;
     font-size:28px;
@@ -144,51 +167,43 @@ table td{
 <body>
 
 <div class="logo">
-    <i class="fa-solid fa-burger"></i>
+
+    <i class="fa-solid fa-box"></i>
     McDonald's
+
 </div>
 
 <div class="container">
 
 <div class="top">
 
-<h1 class="titulo">
-    Mantenimiento Insumos
-</h1>
+    <h1 class="titulo">
+        Mantenimiento Insumos
+    </h1>
 
-<a class="btn-regresar"
-href="../../principal/dashboard.php">
+    <a class="btn-regresar"
+       href="../../principal/dashboard.php">
 
-<i class="fa-solid fa-arrow-left"></i>
-Regresar
+        <i class="fa-solid fa-arrow-left"></i>
+        Regresar
 
-</a>
+    </a>
 
 </div>
 
 <form action="guardar.php" method="POST">
 
-<input type="text"
-name="nombre"
-placeholder="Nombre insumo"
-required>
+    <input type="text"
+           name="nombre"
+           placeholder="Ingrese insumo"
+           required>
 
-<input type="number"
-name="cantidad"
-placeholder="Cantidad"
-required>
+    <button class="btn-guardar" type="submit">
 
-<input type="text"
-name="proveedor"
-placeholder="Proveedor"
-required>
+        <i class="fa-solid fa-floppy-disk"></i>
+        Grabar
 
-<button class="btn-guardar" type="submit">
-
-<i class="fa-solid fa-floppy-disk"></i>
-Grabar
-
-</button>
+    </button>
 
 </form>
 
@@ -197,52 +212,60 @@ Grabar
 <tr>
     <th>ID</th>
     <th>Nombre</th>
-    <th>Cantidad</th>
-    <th>Proveedor</th>
     <th>Acciones</th>
 </tr>
 
-<?php while($fila=mysqli_fetch_assoc($resultado)){ ?>
+<?php if (!empty($resultados)): ?>
+
+    <?php foreach ($resultados as $fila): ?>
+
+    <tr>
+
+        <td>
+            <?php echo htmlspecialchars($fila['id']); ?>
+        </td>
+
+        <td>
+            <?php echo htmlspecialchars($fila['nombre']); ?>
+        </td>
+
+        <td>
+
+            <a class="btn-editar"
+               href="editar.php?id=<?php echo $fila['id']; ?>">
+
+               Editar
+
+            </a>
+
+            <a class="btn-eliminar"
+               href="eliminar.php?id=<?php echo $fila['id']; ?>"
+               onclick="return confirm('¿Estás seguro de eliminar este insumo?');">
+
+               Eliminar
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
 
 <tr>
 
-<td>
-<?php echo $fila['id']; ?>
-</td>
+    <td colspan="3"
+        style="text-align:center; color:#666;">
 
-<td>
-<?php echo $fila['nombre']; ?>
-</td>
+        No se encontraron insumos registrados.
 
-<td>
-<?php echo $fila['cantidad']; ?>
-</td>
-
-<td>
-<?php echo $fila['proveedor']; ?>
-</td>
-
-<td>
-
-<a class="btn-editar"
-href="editar.php?id=<?php echo $fila['id']; ?>">
-
-Editar
-
-</a>
-
-<a class="btn-eliminar"
-href="eliminar.php?id=<?php echo $fila['id']; ?>">
-
-Eliminar
-
-</a>
-
-</td>
+    </td>
 
 </tr>
 
-<?php } ?>
+<?php endif; ?>
 
 </table>
 

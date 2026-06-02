@@ -1,14 +1,38 @@
 <?php
-
 include("../../config/MysqlDB.php");
 
-$id = $_GET['id'];
+// Verificar que el ID venga por la URL
+$id = isset($_GET['id']) ? trim($_GET['id']) : '';
 
-$sql = "DELETE FROM costos_producto
-WHERE id='$id'";
+if (!empty($id)) {
 
-mysqli_query($conn, $sql);
+    try {
 
-header("Location:index.php");
+        // Ejecución segura de eliminación con PDO
+        $sql = "DELETE FROM costos_producto
+                WHERE id = :id";
 
+        $stmt = $conn_mysql->prepare($sql);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+    } catch (PDOException $e) {
+
+        // Si arroja error por llave foránea
+        echo "<script>
+
+            alert('No se puede eliminar el costos_producto porque está asociado a otros registros.');
+
+            window.location='index.php';
+
+        </script>";
+
+        exit();
+    }
+}
+
+header("Location: index.php");
+exit();
 ?>

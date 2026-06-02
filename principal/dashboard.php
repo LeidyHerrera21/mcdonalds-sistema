@@ -10,10 +10,8 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 */
+
 ?>
-
-
-
 <!DOCTYPE html>
 
 <html lang="es">
@@ -74,7 +72,8 @@ if (!isset($_SESSION['usuario_id'])) {
 
             <li>
 
-                <a href="index.php?action=productos">
+                <a href="../mantenimientos/productos/index.php">
+
 
                     <i class="fas fa-box"></i>
 
@@ -116,7 +115,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
             <li>
 
-                <a href="index.php?action=pedidos">
+                <a href="../mantenimientos/pedidos/index.php">
 
                     <i class="fas fa-shopping-cart"></i>
 
@@ -130,11 +129,11 @@ if (!isset($_SESSION['usuario_id'])) {
 
             <li>
 
-                <a href="index.php?action=facturacion">
+                <a href="../mantenimientos/turno/index.php">
 
-                    <i class="fas fa-file-invoice-dollar"></i>
+                    <i class="fas fa-user-clock"></i>
 
-                    Facturación
+                    Turno del Empleado
 
                 </a>
 
@@ -146,7 +145,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <a href="../mantenimientos/costos_producto/index.php">
 
-        <i class="fa-solid fa-money-bill-wave"></i>
+        <i class="fas fa-coins"></i>
 
         Costos Producto
 
@@ -197,20 +196,25 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <a href="../mantenimientos/promociones/index.php">
 
-        <i class="fas fa-chart-pie"></i>
+        <i class="fas fa-ticket-simple"></i>
 
         Promociones
 
     </a>
 
 </li>
-          <li>
-    <a href="../mantenimientos/sucursales/index.php">
-        <i class="fa-solid fa-store"></i>
-        Sucursales
-    </a>
-</li>
 
+          <li>
+
+    <a href="../mantenimientos/sucursales/index.php">
+
+        <i class="fa-solid fa-store"></i>
+
+        Sucursales
+
+    </a>
+
+</li>
 <li>
     <a href="../mantenimientos/empleados/index.php">
         <i class="fa-regular fa-address-book"></i>
@@ -234,36 +238,26 @@ if (!isset($_SESSION['usuario_id'])) {
 
 <li>
     <a href="../mantenimientos/detalle/index.php">
-    <i class="fa-regular fa-folder"></i>
+    <i class="fas fa-receipt"></i>
         Detalle de Pedidos
     </a>
 </li>
+
             <li>
 
-                <a href="index.php?action=configuracion">
-
-                    <i class="fas fa-cog"></i>
-
-                    Configuración
-
-                </a>
+<a href="../manuales/manuales.php">
+    <i class="fas fa-book"></i>
+    Manuales
+</a>
 
             </li>
 
            <li>
 
-                <a href="index.php?action=configuracion">
-
-                    <i class="fa-solid fa-right-from-bracket"></i>
-
-                    Cerrar Sesion
-
-                </a>
-
-            </li>
-
-            </ul>
-
+                <a href="logout.php">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Cerrar Sesion
+</a>
 
 
     </div>
@@ -318,7 +312,7 @@ if (!isset($_SESSION['usuario_id'])) {
     </div>
 
     <div class="card" data-reporte="costo_productos">
-        <i class="fa-solid fa-money-bill-wave"></i>
+        <i class="fas fa-coins"></i>
         <h3>Costo Productos</h3>
         <h2 id="num-costo_productos">...</h2>
     </div>
@@ -342,7 +336,7 @@ if (!isset($_SESSION['usuario_id'])) {
     </div>
 
     <div class="card" data-reporte="promociones">
-        <i class="fas fa-chart-pie"></i>
+        <i class="fas fa-ticket-simple"></i>
         <h3>Promociones</h3>
         <h2 id="num-promociones">...</h2>
     </div>
@@ -359,43 +353,46 @@ if (!isset($_SESSION['usuario_id'])) {
         <h2 id="num-sucursales">...</h2>
     </div>
     
-    <div class="card" data-id="productos">
+    <div class="card" data-reporte="productos">
         <i class="fas fa-box"></i>
         <h3>Productos</h3>
         <h2 id="num-productos">...</h2>
     </div>
 
-    <div class="card" data-id="pedidos">
+    <div class="card" data-reporte="pedidos">
         <i class="fas fa-shopping-cart"></i>
         <h3>Pedidos</h3>
         <h2 id="num-pedidos">...</h2>
     </div>
 
-    <div class="card" data-id="ventas">
-        <i class="fas fa-dollar-sign"></i>
-        <h3>Ventas</h3>
-        <h2 id="num-ventas">...</h2>
-    </div>
-    <div class="card" data-id="empleados">
-    <i class="fa-regular fa-address-book"></i>
-        <h3>Empleados</h3>
-        <h2 id="num-empleados">...</h2>
-    </div>
-    <div class="card" data-id="inventarios">
-         <i class="fa-solid fa-cart-flatbed"></i>
+    <div class="card" data-reporte="inventarios">
+        <i class="fa-solid fa-cart-flatbed"></i>
         <h3>Inventarios</h3>
         <h2 id="num-inventarios">...</h2>
     </div>
-    <div class="card" data-id="pagos">
+
+    <div class="card" data-reporte="empleados">
+        <i class="fa-regular fa-address-book"></i>
+        <h3>Empleados</h3>
+        <h2 id="num-empleados">...</h2>
+    </div>
+
+    <div class="card" data-reporte="pagos">
         <i class="fa-solid fa-hand-holding-dollar"></i>
         <h3>Pagos</h3>
         <h2 id="num-pagos">...</h2>
     </div>
-    <div class="card" data-id="detalle">
-        <i class="fa-regular fa-folder"></i>
-        <h3> Detalle de Pedidos</h3>
+
+    <div class="card" data-reporte="detalle">
+        <i class="fas fa-receipt"></i>
+        <h3>Detalle de Pedidos</h3>
         <h2 id="num-detalle">...</h2>
     </div>
+
+    <div class="card" data-reporte="turno">
+        <i class="fas fa-user-clock"></i>
+        <h3>Turno de Empleado</h3>
+        <h2 id="num-turno">...</h2> </div>
 </div>
 
 

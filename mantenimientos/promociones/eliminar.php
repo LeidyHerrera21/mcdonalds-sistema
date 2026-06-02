@@ -5,18 +5,26 @@ include("../../config/MysqlDB.php");
 $id = isset($_GET['id']) ? trim($_GET['id']) : '';
 
 if (!empty($id)) {
+
     try {
-        // Ejecución segura de eliminación con PDO
+
+        // Eliminación segura con PDO
         $sql = "DELETE FROM promociones WHERE id = :id";
+
         $stmt = $conn_mysql->prepare($sql);
+
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
         $stmt->execute();
+
     } catch (PDOException $e) {
-        // Si arroja error por llave foránea (categoría en uso), salta esta alerta
+
+        // Si ocurre error
         echo "<script>
-            alert('No se puede eliminar los promociones porque esta asociada productos.');
+            alert('No se puede eliminar la promoción.');
             window.location='index.php';
         </script>";
+
         exit();
     }
 }

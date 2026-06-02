@@ -1,20 +1,48 @@
 <?php
-
 include("../../config/MysqlDB.php");
 
-$nombre_producto = $_POST['nombre_producto'];
-$costo = $_POST['costo'];
-$precio = $_POST['precio'];
+if (isset($_POST['nombre'])) {
 
-$sql = "INSERT INTO costos_producto
-(nombre_producto, costo, precio)
+    $nombre = trim($_POST['nombre']);
 
-VALUES
+    if (!empty($nombre)) {
 
-('$nombre_producto', '$costo', '$precio')";
+        try {
 
-mysqli_query($conn, $sql);
+            // 1. Buscamos el ID más alto actual en la tabla costos_producto
+            $sqlMax = "SELECT MAX(id) AS max_id 
+                       FROM costos_producto";
 
-header("Location:index.php");
+            $stmtMax = $conn_mysql->prepare($sqlMax);
 
+            $stmtMax->execute();
+
+            $row = $stmtMax->fetch(PDO::FETCH_ASSOC);
+            
+            // 2. Si hay registros le sumamos 1, si está vacía empezamos desde el 1
+            $nuevoId = ($row['max_id'] !== null)
+                     ? $row['max_id'] + 1
+                     : 1;
+
+            // 3. Insertamos enviando tanto el ID calculado como el nombre
+            $sql = "INSERT INTO costos_producto (id, nombre)
+                    VALUES (:id, :nombre)";
+
+            $stmt = $conn_mysql->prepare($sql);
+
+            $stmt->bindParam(':id', $nuevoId, PDO::PARAM_INT);
+            $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+
+            die("Error crítico al insertar: " . $e->getMessage());
+        }
+    }
+}
+
+// Redireccionamos limpiamente de vuelta al index principal
+header("Location: index.php");
+exit();
 ?>

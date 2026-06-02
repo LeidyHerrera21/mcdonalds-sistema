@@ -1,6 +1,6 @@
 <?php
-$host = "192.168.56.101"; // IP de tu CentOS 7
-$db   = "macdonals";
+$host = "192.168.1.50"; // IP de tu CentOS 7
+$db   = "Macdonalds";
 $user = "root";
 $pass = "Str0ngP@ssw0rd!"; // Tu contraseña real
 $charset = "utf8mb4";

@@ -1,14 +1,14 @@
 <?php
 include("../../config/MysqlDB.php");
 
-// Verificamos que la variable de conexiÃ³n PDO exista
+// Verificamos que la variable de conexión PDO exista
 if (!isset($conn_mysql)) {
-    die("Error: La variable \$conn_mysql no estÃ¡ definida en MysqlDB.php");
+    die("Error: La variable \$conn_mysql no está definida en MysqlDB.php");
 }
 
 try {
-    // Consulta adaptada a la estructura de tu tabla DETALLEPEDIDO
-    $sql = "SELECT IDDETALLE, IDPEDIDO, IDPRODUCTO, CANTIDAD FROM DETALLEPEDIDO";
+    // Consulta adaptada con entidad y atributos en minúsculas
+    $sql = "SELECT iddetalle, idpedido, idproducto, cantidad FROM detallepedido";
     $stmt = $conn_mysql->prepare($sql);
     $stmt->execute();
     // Obtenemos todas las filas en un array asociativo
@@ -195,13 +195,13 @@ table td{
 <?php if (!empty($resultados)): ?>
     <?php foreach ($resultados as $fila): ?>
     <tr>
-        <td><?php echo htmlspecialchars($fila['IDDETALLE']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDPEDIDO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['IDPRODUCTO']); ?></td>
-        <td><?php echo htmlspecialchars($fila['CANTIDAD']); ?></td>
+        <td><?php echo htmlspecialchars($fila['iddetalle']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idpedido']); ?></td>
+        <td><?php echo htmlspecialchars($fila['idproducto']); ?></td>
+        <td><?php echo htmlspecialchars($fila['cantidad']); ?></td>
         <td>
-            <a class="btn-editar" href="editar_detalle.php?id=<?php echo $fila['IDDETALLE']; ?>">Editar</a>
-            <a class="btn-eliminar" href="eliminar_detalle.php?id=<?php echo $fila['IDDETALLE']; ?>" onclick="return confirm('Â¿EstÃ¡s seguro de eliminar este detalle de pedido?');">Eliminar</a>
+            <a class="btn-editar" href="editar_detalle.php?id=<?php echo $fila['iddetalle']; ?>">Editar</a>
+            <a class="btn-eliminar" href="eliminar_detalle.php?id=<?php echo $fila['iddetalle']; ?>" onclick="return confirm('¿Estás seguro de eliminar este detalle de pedido?');">Eliminar</a>
         </td>
     </tr>
     <?php endforeach; ?>

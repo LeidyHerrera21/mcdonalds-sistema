@@ -7,23 +7,23 @@ if (isset($_POST['nombre']) && isset($_POST['idsucursal'])) {
     $nombre     = trim($_POST['nombre']);
     $idsucursal = trim($_POST['idsucursal']);
 
-    // Validamos que los campos no estÃ©n vacÃ­os
+    // Validamos que los campos no estén vacíos
     if (!empty($nombre) && !empty($idsucursal)) {
         try {
-            // Insertamos directamente en la tabla EMPLEADO. IDEMPLEADO se genera solo.
-            $sql = "INSERT INTO EMPLEADO (NOMBRE, IDSUCURSAL) 
+            // Insertamos en minúsculas en la tabla empleado
+            $sql = "INSERT INTO empleado (nombre, idsucursal) 
                     VALUES (:nombre, :idsucursal)";
             
             $stmt = $conn_mysql->prepare($sql);
             
-            // Vinculamos los parÃ¡metros con su tipo de dato correspondiente
+            // Vinculamos los parámetros con su tipo de dato correspondiente
             $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
             $stmt->bindParam(':idsucursal', $idsucursal, PDO::PARAM_INT);
             
             $stmt->execute();
 
         } catch (PDOException $e) {
-            die("Error crÃ­tico al insertar el registro del empleado: " . $e->getMessage());
+            die("Error crítico al insertar el registro del empleado: " . $e->getMessage());
         }
     }
 }
